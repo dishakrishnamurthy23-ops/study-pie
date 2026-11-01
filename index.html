@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Study Pie</title>
+<meta name="theme-color" content="#3f7ad9">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1><input class="who" id="who" aria-label="Your name" value="My" spellcheck="false">'s Study Pie ~</h1>
+      <svg class="squig" viewBox="0 0 180 14" aria-hidden="true"><path d="M2 8 C 20 0, 30 14, 48 7 S 78 0, 96 7 S 126 14, 144 6 S 170 2, 178 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <div class="today-date" id="todayDate"></div>
+      <button class="btn primary" id="installBtn" type="button" hidden>📲 Install app</button>
+    </div>
+    <div class="doodles" aria-hidden="true">
+      <svg width="54" height="44" viewBox="0 0 54 44"><path d="M27 10 C20 5 9 5 4 8 L4 38 C9 35 20 35 27 40 C34 35 45 35 50 38 L50 8 C45 5 34 5 27 10 Z M27 10 L27 40" fill="var(--c-sky)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      <svg width="40" height="40" viewBox="0 0 40 40"><path d="M20 4 L24 15 L36 15 L26 22 L30 34 L20 27 L10 34 L14 22 L4 15 L16 15 Z" fill="var(--c-sun)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      <svg width="40" height="40" viewBox="0 0 40 40"><path d="M8 32 L12 22 L28 6 L34 12 L18 28 Z M8 32 L18 28 M12 22 L18 28" fill="var(--c-pink)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Views">
+    <button class="tab" role="tab" data-tab="today">Day</button>
+    <button class="tab" role="tab" data-tab="week">Week</button>
+    <button class="tab" role="tab" data-tab="journey">Journey</button>
+    <button class="tab" role="tab" data-tab="log">Log</button>
+  </nav>
+
+  <div class="grid">
+    <div class="wheel-box">
+      <svg id="wheel" viewBox="-235 -235 470 470" role="img" aria-label="Study wheel"></svg>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="side">
+      <section class="card now" id="nowCard"></section>
+      <section class="card list">
+        <div class="navrow">
+          <button class="btn navbtn" id="prevBtn" type="button" aria-label="Previous">‹</button>
+          <h2 id="listTitle"></h2>
+          <button class="btn navbtn" id="nextBtn" type="button" aria-label="Next">›</button>
+        </div>
+        <div class="chips" id="chips" role="group" aria-label="Track"></div>
+        <button class="btn ghost backtoday" id="goToday" type="button" hidden>↩ Back to today</button>
+        <ul class="rows" id="rows"></ul>
+        <button class="btn addbtn" id="addBlock" type="button">+ Add a study block on this day</button>
+        <p class="hint" id="hint"></p>
+      </section>
+    </div>
+    <div class="extras">
+      <div class="notes">
+        <h2 class="notes-h">★ Notes</h2>
+        <ul id="notesList"></ul>
+        <button class="btn addbtn" id="addNote" type="button">+ Add note</button>
+      </div>
+      <div class="pinhelp backup">
+        <p>💾 Your ticks are saved inside this browser automatically. Download a backup now and then, in case you clear browser data or change phones.</p>
+        <div class="acts" style="justify-content:flex-start"><button class="btn" id="exportBtn" type="button">Download backup</button>
+        <label class="btn" for="importFile">Load backup</label><input type="file" id="importFile" accept=".json,application/json" hidden></div>
+        <p id="backupMsg"></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="savebar"><div class="pill" id="savePill" hidden><span id="saveMsg">Saved</span></div></div>
+
+<script src="config.js"></script>
+<script src="plan-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
