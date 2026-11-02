@@ -611,5 +611,9 @@ let installEvt=null;const instBtn=$("#installBtn");
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;instBtn.hidden=false});
 instBtn.addEventListener("click",async()=>{if(!installEvt)return;installEvt.prompt();await installEvt.userChoice;installEvt=null;instBtn.hidden=true});
 window.addEventListener("appinstalled",()=>{instBtn.hidden=true});
-if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});
+if("serviceWorker" in navigator&&location.protocol!=="file:"){
+  const hadOld=!!navigator.serviceWorker.controller;let reloaded=false;
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(hadOld&&!reloaded){reloaded=true;location.reload()}});  // new version arrived: reload once to show it
+  navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
+}
 })();
