@@ -35,6 +35,16 @@
     <button class="tab" role="tab" data-tab="log">Log</button>
   </nav>
 
+  <div class="datebar" id="datebar">
+    <button class="btn navbtn" id="dPrev" type="button" aria-label="Previous day">‹</button>
+    <button class="btn datebtn" id="dateBtn" type="button" aria-haspopup="dialog">📅 <span id="dateLbl"></span></button>
+    <button class="btn navbtn" id="dNext" type="button" aria-label="Next day">›</button>
+    <button class="btn ghost" id="dToday" type="button" hidden>↩ Today</button>
+  </div>
+  <p class="pastnote" id="pastNote" hidden></p>
+  <div class="calback" id="calBack" hidden></div>
+  <div class="calpop" id="calPop" role="dialog" aria-label="Calendar" hidden></div>
+
   <div class="grid">
     <div class="wheel-box">
       <svg id="wheel" viewBox="-235 -235 470 470" role="img" aria-label="Study wheel"></svg>

@@ -491,7 +491,31 @@ function renderNotes(){
     ul.appendChild(li);requestAnimationFrame(()=>grow(ta));
   });
 }
-function rerender(){renderNow();renderList();drawWheel()}
+/* ---------- date bar + calendar ---------- */
+let calMonth=null;
+function renderDatebar(){
+  const show=tab==="today"||tab==="week";$("#datebar").hidden=!show;
+  const tk=todayKey(),past=tab==="today"&&sel<tk;
+  $("#pastNote").hidden=!past;if(past)$("#pastNote").textContent=`🕰️ You're looking at ${nice(sel)}. Tick, edit or add anything here, it all saves.`;
+  if(!show)return;
+  $("#dateLbl").textContent=tab==="week"?"Week of "+nice(mondayOf(sel)):(sel===tk?"Today · ":"")+nice(sel);
+  $("#dToday").hidden=tab==="week"?mondayOf(sel)===mondayOf(tk):sel===tk;
+  $("#dPrev").setAttribute("aria-label",tab==="week"?"Previous week":"Previous day");$("#dNext").setAttribute("aria-label",tab==="week"?"Next week":"Next day");
+}
+function calOpen(){calMonth=sel.slice(0,8)+"01";renderCal();$("#calPop").hidden=false;$("#calBack").hidden=false;const s=document.querySelector(".cday.sel");if(s)s.focus()}
+function calClose(){$("#calPop").hidden=true;$("#calBack").hidden=true}
+function renderCal(){
+  const first=pkey(calMonth),y=first.getFullYear(),m=first.getMonth(),days=new Date(y,m+1,0).getDate(),lead=(first.getDay()+6)%7,tk=todayKey();
+  let h=`<div class="calhead"><button type="button" class="btn navbtn" data-cm="-1" aria-label="Previous month">‹</button><h2>${MONTHS[m]} ${y}</h2><button type="button" class="btn navbtn" data-cm="1" aria-label="Next month">›</button><button type="button" class="btn ghost x" data-cclose="1" aria-label="Close">✕</button></div><div class="calgrid">`;
+  h+=["Mo","Tu","We","Th","Fr","Sa","Su"].map(d=>`<span class="cwd">${d}</span>`).join("");
+  for(let i=0;i<lead;i++)h+=`<span></span>`;
+  for(let d=1;d<=days;d++){const k=y+"-"+pad(m+1)+"-"+pad(d),list=BY_DATE[k]||[],st=stats(list),pct=Math.round(st.pct*100),miss=k<tk&&list.some(b=>!S.status[b.id]);
+    h+=`<button type="button" class="cday${k===tk?" today":""}${k===sel?" sel":""}${list.length?"":" free"}${miss?" miss":""}" data-cday="${k}" aria-label="${nice(k)}${list.length?`, ${st.doneN} of ${list.length} done`:""}"><span class="cnum">${d}</span>${list.length?`<span class="cpie" style="--p:${pct}%"></span>`:`<span class="crest">${pkey(k).getDay()===0?"😴":""}</span>`}</button>`}
+  h+=`</div><div class="calleg"><span><span class="cpie" style="--p:60%"></span>fills as you tick</span><span><i class="mdot"></i>has unticked blocks</span><span>😴 Sunday</span></div><div class="acts" style="justify-content:center;margin-top:8px"><button type="button" class="btn" data-cm="0">Go to today</button></div>`;
+  $("#calPop").innerHTML=h;
+}
+function stepDate(dir){sel=addDays(sel,(tab==="week"?7:1)*dir);openId=editId=null;rerender()}
+function rerender(){renderDatebar();renderNow();renderList();drawWheel()}
 function render(){
   document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===tab));
   const who=$("#who");if(document.activeElement!==who)who.value=S.name||"My";sizeWho();
@@ -515,6 +539,17 @@ $("#prevBtn").addEventListener("click",()=>{sel=addDays(sel,tab==="week"?-7:-1);
 $("#nextBtn").addEventListener("click",()=>{sel=addDays(sel,tab==="week"?7:1);openId=editId=null;rerender()});
 $("#goToday").addEventListener("click",()=>{sel=todayKey();openId=editId=null;rerender()});
 $("#addBlock").addEventListener("click",addBlock);
+$("#dPrev").addEventListener("click",()=>stepDate(-1));
+$("#dNext").addEventListener("click",()=>stepDate(1));
+$("#dToday").addEventListener("click",()=>{sel=todayKey();openId=editId=null;rerender()});
+$("#dateBtn").addEventListener("click",calOpen);
+$("#calBack").addEventListener("click",calClose);
+$("#calPop").addEventListener("click",e=>{
+  const c=e.target.closest("[data-cday]");if(c){sel=c.dataset.cday;calClose();setTab("today");return}
+  const m=e.target.closest("[data-cm]");if(m){const v=+m.dataset.cm;if(v===0){sel=todayKey();calClose();setTab("today");return}const d=pkey(calMonth);d.setMonth(d.getMonth()+v);calMonth=dkey(d);renderCal();return}
+  if(e.target.closest("[data-cclose]"))calClose();
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#calPop").hidden)calClose()});
 $("#chips").addEventListener("click",e=>{const c=e.target.closest("[data-track],[data-sec]");if(!c)return;if(c.dataset.track)track=c.dataset.track;else{logSec=c.dataset.sec;openId=null;confirmId=null}rerender()});
 $("#who").addEventListener("input",e=>{S.name=e.target.value.slice(0,14);sizeWho();changed()});
 $("#addNote").addEventListener("click",()=>{const n={id:uid(),t:""};S.sticky.push(n);delNote=null;renderNotes();const t=document.getElementById("note-"+n.id);if(t)t.focus()});

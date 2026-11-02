@@ -224,3 +224,28 @@ h1 .who:focus,h1 .who:hover{outline:none;border-bottom-color:var(--accent)}
 .checklist .ittx{font-size:16px;color:var(--ink);resize:none;overflow:hidden}
 .savebar .pill{max-width:min(560px,100%);text-align:center}
 @media (max-width:440px){.tabs{gap:6px;flex-wrap:nowrap}.tab{font-size:19px;padding:3px 11px}}
+
+/* ---------- date bar + calendar ---------- */
+.datebar{display:flex;align-items:center;justify-content:center;gap:8px;margin:-6px 0 10px;flex-wrap:wrap}
+.datebtn{font-family:var(--display);font-size:22px;padding:4px 14px;background:var(--c-sun);color:var(--slice-ink);border:2px solid var(--ink);transform:rotate(-.8deg)}
+.pastnote{text-align:center;font-size:16px;background:var(--hl);color:var(--ink);border-radius:10px;padding:5px 12px;margin:0 auto 10px;max-width:560px}
+.calback{position:fixed;inset:0;background:rgba(20,18,30,.4);z-index:20}
+.calpop{position:fixed;z-index:21;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-.4deg);width:min(420px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;
+  background:var(--card);border:2px solid var(--ink);border-radius:18px 14px 20px 12px/12px 20px 14px 18px;padding:12px 14px;box-shadow:4px 6px 0 var(--line)}
+.calhead{display:flex;align-items:center;gap:6px}
+.calhead h2{flex:1;text-align:center;font-family:var(--display);font-weight:400;font-size:26px;margin:0}
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:8px}
+.cwd{text-align:center;font-size:14px;color:var(--ink-soft)}
+.cday{position:relative;aspect-ratio:1;border:1.5px solid var(--line);border-radius:10px 12px 9px 11px;background:var(--card);color:var(--ink);font:inherit;padding:2px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0}
+.cday .cnum{font-size:16px;line-height:1}
+.cpie{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--ink);background:conic-gradient(var(--c-mint) var(--p),transparent 0);display:inline-block;flex:none}
+.crest{font-size:14px;line-height:18px;height:18px}
+.cday.today{border-color:var(--accent);border-width:2.5px}
+.cday.sel{background:color-mix(in srgb,var(--c-sun) 60%,var(--card))}
+.cday.free .cnum{color:var(--ink-soft)}
+.cday.miss::after{content:"";position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:#e55353}
+.calleg{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font-size:14px;color:var(--ink-soft);margin-top:10px}
+.calleg span{display:inline-flex;align-items:center;gap:5px}
+.calleg .cpie{width:14px;height:14px}
+.mdot{width:8px;height:8px;border-radius:50%;background:#e55353;display:inline-block}
